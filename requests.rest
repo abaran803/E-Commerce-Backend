@@ -1,0 +1,29 @@
+GET http://localhost:3001/show-items
+
+###
+
+POST http://localhost:3001/add-item
+Content-Type: application/json
+
+{
+    "id": "p2",
+    "name": "Product1",
+    "image": "ProductImage",
+    "totalPrice": "Product",
+    "quantity": 1,
+    "type": "ProductType",
+    "color": "ProductColor",
+    "size": "ProductSize"
+}
+
+###
+
+GET http://localhost:3001/show-item/p2
+
+###
+
+GET http://localhost:3001/remove-one/p2
+
+###
+
+GET http://localhost:3001/remove-all/p1
