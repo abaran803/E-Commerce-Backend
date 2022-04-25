@@ -1,86 +1,41 @@
-const express = require('express');
-const cors = require('cors');
-const bodyparser = require('body-parser')
+const express = require("express");
 const app = express();
+const cors = require('cors')
+const bodyParser = require("body-parser");
+
+const siteData = require('./siteData');
+let cartItems = require('./cartItems');
 
 app.use(cors());
-app.options('*', cors());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-const PORT = 3001;
-let allProducts = [];
+const PORT = process.env.PORT || 8080
 
-app.use(bodyparser.urlencoded({ extended: false }))
-app.use(bodyparser.json())
-app.use(express.json())
-
-app.get('/', (req, res) => {
-    res.status(201).send({ "User": "Ayush" })
+app.get("/verify", (req, res) => {
+	res.sendStatus(200)
 })
 
-app.get('/show-item/:id', (req, res) => {
-    const id = req.params.id;
-    console.log(typeof(id))
-    console.log(id);
-    const product = allProducts.find(item => item.id === id);
-    console.log(product);
-    if(!product) return res.sendStatus(400);
-    res.status(201).send(product);
+app.post("/add-new/*", (req, res) => {
+	const data = req.body;
+	cartItems.push(data);
+	return res.status(200).json(cartItems);
 })
 
-app.get('/show-items', (req, res) => {
-    res.status(201).send(allProducts);
+app.post("/remove-all/*", (req, res) => {
+	const id = req.body.id;
+	cartItems = cartItems.filter(item => item.id !== id);
+	return res.status(200).send(cartItems);
 })
 
-app.get('/remove-one/:id', (req,res) => {
-    const id = req.params.id;
-    const ind = allProducts.findIndex(product => product.id === id);
-    if(ind === -1) return res.sendStatus(409);
-    if(allProducts[ind].quantity === 1) {
-        return res.redirect('/remove-all/'+id);
-    }
-    allProducts[ind].quantity--;
-    res.sendStatus(200);
+app.get("/get-items", (req, res) => {
+	return res.status(200).json(cartItems);
 })
 
-app.get('/remove-all/:id', (req,res) => {
-    const id = req.params.id;
-    const ind = allProducts.findIndex(product => product.id === id);
-    if(ind === -1) return res.sendStatus(409);
-    allProducts = allProducts.filter(product => product.id !== id);
-    res.sendStatus(200);
-})
-
-app.post('/add-item', (req, res) => {
-    const id = req.body.id;
-    const title = req.body.title;
-    const image = req.body.image;
-    const totalPrice = req.body.totalPrice;
-    const quantity = req.body.quantity;
-    const type = req.body.type;
-    const color = req.body.color;
-    const size = req.body.size;
-    const itemIndex = allProducts.findIndex(item => item.id === id);
-    if(itemIndex !== -1) {
-        allProducts[itemIndex].quantity++;
-    } else {
-        allProducts.push({ id, title, image, totalPrice, quantity, type, color, size })
-    }
-    console.log("Item added to Cart");
-    res.sendStatus(201);
-})
-
-app.post('/remove-item', (req, res) => {
-    const id = req.body.id;
-    const itemIndex = allProducts.findIndex(item => item.id === id);
-    if(itemIndex === -1) return res.sendStatus(404);
-    if(allProducts[itemIndex].quantity !== 1) {
-        allProducts[itemIndex].quantity--;
-    } else {
-        allProducts = allProducts.filter(item => item.id !== id);
-    }
-    res.sendStatus(200);
+app.get("/site-data", (req, res) => {
+	res.status(200).send(siteData);
 })
 
 app.listen(PORT, () => {
-    console.log("Server started at " + PORT);
+	console.log("Server started at port", PORT);
 })

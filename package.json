@@ -1,17 +1,21 @@
 {
-  "name": "e-commerce_backend",
+  "name": "Desktop",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
   },
-  "keywords": [],
+  "keywords": ["example", "heroku"],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.19.2",
+    "body-parser": "^1.20.0",
     "cors": "^2.8.5",
     "express": "^4.17.3"
+  },
+  "engines": {
+    "node": "14.x"
   }
 }
