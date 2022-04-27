@@ -13,10 +13,8 @@ app.use(bodyParser.json());
 
 const PORT = process.env.PORT || 8080
 
-app.get("/:count", async (req, res) => {
-	const count = req.params.count;
-	const value = await getSomeCategories(count);
-	res.json(value);
+app.get("/site-data", (req, res) => {
+	res.status(200).send(siteData);
 })
 
 app.get("/someProducts/:count", async (req, res) => {
@@ -57,8 +55,10 @@ app.get("/get-items", (req, res) => {
 	return res.status(200).json(cartItems);
 })
 
-app.get("/site-data", (req, res) => {
-	res.status(200).send(siteData);
+app.get("/:count", async (req, res) => {
+	const count = req.params.count;
+	const value = await getSomeCategories(count);
+	res.json(value);
 })
 
 app.listen(PORT, () => {
