@@ -1,6 +1,6 @@
 module.exports = {
     data: {
-        brandName: "Brand",
+        brandName: "Amazkart",
         navItems: [
             {address: "/home", name: "Home"},
             {address: "/product", name: "Product"},
