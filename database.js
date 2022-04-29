@@ -44,3 +44,44 @@ exports.removeOneInstance = async (id, userId, ownerId) => {
         console.log(err);
     }
 }
+
+exports.registerOwner = async (ownerData) => {
+    const query = {name: ownerData.userName, email: ownerData.mail, pwd: ownerData.password};
+    const check = await Owner.findOne({email: query.email});
+    if(check) {
+        return false;
+    }
+    const data = await Owner.create(query);
+    return data;
+}
+
+exports.loginOwner = async (ownerData) => {
+    const query = {name: ownerData.userName, email: ownerData.mail, pwd: ownerData.password};
+    const check = await Owner.findOne({email: query.email, pwd: query.pwd});
+    if(!check) {
+        return false;
+    }
+    const response = check;
+    return response;
+}
+
+exports.registerUser = async (userData) => {
+    const query = {name: userData.userName, email: userData.mail, pwd: userData.password};
+    const check = await User.findOne({email: query.email});
+    console.log(userData, check);
+    if(check) {
+        return false;
+    }
+    const data = await User.create(query);
+    return data;
+}
+
+exports.loginUser = async (userData) => {
+    const query = {name: userData.userName, email: userData.mail, pwd: userData.password};
+    const check = await User.findOne({email: query.email, pwd: query.pwd});
+    if(!check) {
+        return false;
+    }
+    const response = check;
+    return response;
+}

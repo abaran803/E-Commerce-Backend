@@ -49,3 +49,39 @@ exports.getCategories = async (req, res) => {
     const value = await getSomeCategories(count);
     res.json(value);
 };
+
+exports.registerOwner = async (req, res) => {
+    const response = await database.registerOwner(req.body);
+    if(!response) {
+        return res.sendStatus(409);
+    }
+    return res.status(200).json(response);
+
+}
+
+exports.loginOwner = async (req, res) => {
+    const response = await database.loginOwner(req.body);
+    if(!response) {
+        return res.sendStatus(404);
+    }
+    return res.status(200).json(response);
+
+}
+
+exports.registerUser = async (req, res) => {
+    const response = await database.registerUser(req.body);
+    if(!response) {
+        return res.sendStatus(409);
+    }
+    return res.status(200).json(response);
+
+}
+
+exports.loginUser = async (req, res) => {
+    const response = await database.loginUser(req.body);
+    if(!response) {
+        return res.sendStatus(404);
+    }
+    return res.status(200).json(response);
+
+}

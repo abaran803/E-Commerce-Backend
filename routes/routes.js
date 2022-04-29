@@ -18,4 +18,12 @@ router.get("/get-items/:ownerId/:userId", pageController.getItems);
 
 router.get("/getCategories/:ownerId/:count", pageController.getCategories);
 
+router.post("/registerOwner", pageController.registerOwner);
+
+router.post("/loginOwner", pageController.loginOwner);
+
+router.post("/registerUser", pageController.registerUser);
+
+router.post("/loginUser", pageController.loginUser);
+
 module.exports = router;
