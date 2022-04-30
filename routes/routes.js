@@ -12,6 +12,8 @@ router.get("/getProductsByCategory/:ownerId/:category", pageController.getProcts
 
 router.post("/add-new", pageController.addNewProduct);
 
+router.post("/remove-one", pageController.removeOneProducts);
+
 router.post("/remove-all", pageController.removeAllProducts);
 
 router.get("/get-items/:ownerId/:userId", pageController.getItems);

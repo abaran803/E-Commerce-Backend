@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const user = new Schema({ name: String, email: String, pwd: String });
+const user = new Schema({ name: String, email: String, pwd: String, storeId: String });
 const owner = new Schema({ name: String, email: String, pwd: String });
 const cart = new Schema({ id: String, image: String, title: String, type: String, size: String, quantity: Number, price: String, userId: String, ownerId: String });
 const User = mongoose.model('User', user);
@@ -31,6 +31,20 @@ exports.findAllData = async (userId, ownerId) => {
     try {
         const data = await Cart.find({ userId, ownerId });
         return data;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+exports.removeOneItem = async (id, userId, ownerId) => {
+    try {
+        const data = await Cart.findOne({ id, userId, ownerId });
+        if(data.quantity > 1) {
+            const value = await Cart.updateOne({id, userId, ownerId}, {$inc : {quantity: -1}})
+            return value;
+        }
+        const value = await Cart.deleteOne({ id, userId, ownerId });
+        return value;
     } catch (err) {
         console.log(err);
     }
@@ -66,7 +80,7 @@ exports.loginOwner = async (ownerData) => {
 }
 
 exports.registerUser = async (userData) => {
-    const query = {name: userData.userName, email: userData.mail, pwd: userData.password};
+    const query = {name: userData.userName, email: userData.mail, pwd: userData.password, storeId: userData.ownerId};
     const check = await User.findOne({email: query.email});
     console.log(userData, check);
     if(check) {

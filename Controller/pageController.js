@@ -29,6 +29,14 @@ exports.addNewProduct = async (req, res) => {
     return res.status(200).json(response);
 };
 
+exports.removeOneProducts = async (req, res) => {
+    const id = req.body.id;
+    const userId = req.body.userId;
+    const ownerId = req.body.ownerId;
+    const response = await database.removeOneItem(id, userId, ownerId);
+    return res.status(200).json(response);
+};
+
 exports.removeAllProducts = async (req, res) => {
     const id = req.body.id;
     const userId = req.body.userId;
