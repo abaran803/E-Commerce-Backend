@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const { getSomeCategories, getSomeProducts, getSpecificItem, getProductsByCategory } = require('./RequestFakeAPI');
 
 const user = new Schema({ name: String, email: String, pwd: String, storeId: String });
 const owner = new Schema({ name: String, email: String, pwd: String });
@@ -11,6 +12,10 @@ const Cart = mongoose.model('Cart', cart);
 mongoose.connect(process.env.CONNECTION_STRING)
     .then(data => console.log('Database Connected'))
     .catch(err => console.log("Database not Connected", err))
+
+
+
+// Cart Actions
 
 exports.addItemToCart = async (item, userId, ownerId) => {
     try {
@@ -59,6 +64,10 @@ exports.removeOneInstance = async (id, userId, ownerId) => {
     }
 }
 
+
+
+// Register and Login Actions
+
 exports.registerOwner = async (ownerData) => {
     const query = {name: ownerData.userName, email: ownerData.mail, pwd: ownerData.password};
     const check = await Owner.findOne({email: query.email});
@@ -98,4 +107,35 @@ exports.loginUser = async (userData) => {
     }
     const response = check;
     return response;
+}
+
+
+// Site Data Action with verifying credentials
+
+exports.getSomeCategories = async (count, storeId) => {
+    const check = await Owner.findById(storeId);
+    if(check) {
+        return getSomeCategories(count);
+    }
+}
+
+exports.getSomeProducts = async (count, storeId) => {
+    const check = await Owner.findById(storeId);
+    if(check) {
+        return getSomeProducts(count);
+    }
+}
+
+exports.getSpecificItem = async (id, storeId) => {
+    const check = await Owner.findById(storeId);
+    if(check) {
+        return getSpecificItem(id);
+    }
+}
+
+exports.getProductsByCategory = async (category, storeId) => {
+    const check = await Owner.findById(storeId);
+    if(check) {
+        return getProductsByCategory(category);
+    }
 }

@@ -1,24 +1,27 @@
 const database = require('../database');
 const siteData = require('../siteData');
-const { getSomeCategories, getSomeProducts, getSpecificItem, getProductsByCategory } = require('../RequestFakeAPI');
+const { getSomeProducts, getSpecificItem, getProductsByCategory } = require('../database');
 
 exports.getSiteData = (req, res) => {
     res.status(200).send(siteData);
 }
 exports.getProductsData = async (req, res) => {
     const count = req.params.count;
-    const value = await getSomeProducts(count);
+    const ownerId = req.body.ownerId;
+    const value = await getSomeProducts(count, ownerId);
     res.json(value);
 }
 exports.getProductDetails = async (req, res) => {
     const id = req.params.id;
-    const value = await getSpecificItem(id);
+    const ownerId = req.body.ownerId;
+    const value = await getSpecificItem(id, ownerId);
     res.json(value);
 }
 
 exports.getProctsByCategory = async (req, res) => {
     const category = req.params.category;
-    const value = await getProductsByCategory(category);
+    const ownerId = req.body.ownerId;
+    const value = await getProductsByCategory(category, ownerId);
     res.json(value);
 }
 
@@ -54,7 +57,8 @@ exports.getItems = async (req, res) => {
 
 exports.getCategories = async (req, res) => {
     const count = req.params.count;
-    const value = await getSomeCategories(count);
+    const storeId = req.params.ownerId;
+    const value = await database.getSomeCategories(count, storeId);
     res.json(value);
 };
 
