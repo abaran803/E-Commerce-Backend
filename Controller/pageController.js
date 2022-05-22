@@ -1,28 +1,31 @@
 const database = require('../database');
 const siteData = require('../siteData');
-const { getSomeProducts, getSpecificItem, getProductsByCategory } = require('../database');
+const { getSomeProducts, getSpecificItem, getProductsByCategory, storeCheck} = require('../database');
+
+exports.storeCheck = async (req, res) => {
+    const storeId = req.params.storeId;
+    const response = await storeCheck(storeId);
+    return res.sendStatus(response);
+}
 
 exports.getSiteData = (req, res) => {
     res.status(200).send(siteData);
 }
 exports.getProductsData = async (req, res) => {
     const count = req.params.count;
-    const ownerId = req.body.ownerId;
-    const value = await getSomeProducts(count, ownerId);
-    res.json(value);
+    const data = await getSomeProducts(count);
+    data ? res.status(200).json(data) : res.sendStatus(404);
 }
 exports.getProductDetails = async (req, res) => {
     const id = req.params.id;
-    const ownerId = req.body.ownerId;
-    const value = await getSpecificItem(id, ownerId);
-    res.json(value);
+    const data = await getSpecificItem(id);
+    data ? res.status(200).json(data) : res.sendStatus(404);
 }
 
-exports.getProctsByCategory = async (req, res) => {
+exports.getProductsByCategory = async (req, res) => {
     const category = req.params.category;
-    const ownerId = req.body.ownerId;
-    const value = await getProductsByCategory(category, ownerId);
-    res.json(value);
+    const data = await getProductsByCategory(category);
+    data ? res.status(200).json(data) : res.sendStatus(404);
 }
 
 exports.addNewProduct = async (req, res) => {
@@ -57,9 +60,8 @@ exports.getItems = async (req, res) => {
 
 exports.getCategories = async (req, res) => {
     const count = req.params.count;
-    const storeId = req.params.ownerId;
-    const value = await database.getSomeCategories(count, storeId);
-    res.json(value);
+    const data = await database.getSomeCategories(count);
+    data ? res.status(200).json(data) : res.sendStatus(404);
 };
 
 exports.registerOwner = async (req, res) => {

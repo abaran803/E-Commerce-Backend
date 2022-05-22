@@ -14,6 +14,13 @@ mongoose.connect(process.env.CONNECTION_STRING)
     .catch(err => console.log("Database not Connected", err))
 
 
+exports.storeCheck = async (storeId) => {
+    const check = await Owner.findById(storeId);
+    if(!check) {
+        return 404;
+    }
+    return 200;
+}
 
 // Cart Actions
 
@@ -34,10 +41,9 @@ exports.addItemToCart = async (item, userId, ownerId) => {
 
 exports.findAllData = async (userId, ownerId) => {
     try {
-        const data = await Cart.find({ userId, ownerId });
-        return data;
+        return await Cart.find({userId, ownerId});
     } catch (err) {
-        console.log(err);
+        return false;
     }
 }
 
@@ -112,30 +118,34 @@ exports.loginUser = async (userData) => {
 
 // Site Data Action with verifying credentials
 
-exports.getSomeCategories = async (count, storeId) => {
-    const check = await Owner.findById(storeId);
-    if(check) {
-        return getSomeCategories(count);
+exports.getSomeCategories = async (count) => {
+    try {
+        return await getSomeCategories(count);
+    } catch(error) {
+        return false;
     }
 }
 
-exports.getSomeProducts = async (count, storeId) => {
-    const check = await Owner.findById(storeId);
-    if(check) {
-        return getSomeProducts(count);
+exports.getSomeProducts = async (count) => {
+    try {
+        return await getSomeProducts(count);
+    } catch(error) {
+        return false;
     }
 }
 
-exports.getSpecificItem = async (id, storeId) => {
-    const check = await Owner.findById(storeId);
-    if(check) {
-        return getSpecificItem(id);
+exports.getSpecificItem = async (id) => {
+    try {
+        return await getSpecificItem(id);
+    } catch(error) {
+        return false;
     }
 }
 
-exports.getProductsByCategory = async (category, storeId) => {
-    const check = await Owner.findById(storeId);
-    if(check) {
-        return getProductsByCategory(category);
+exports.getProductsByCategory = async (category) => {
+    try {
+        return await getProductsByCategory(category);
+    } catch(error) {
+        return false;
     }
 }
