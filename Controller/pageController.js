@@ -29,32 +29,32 @@ exports.getProductsByCategory = async (req, res) => {
 }
 
 exports.addNewProduct = async (req, res) => {
-    const userId = req.body.userId;
-    const ownerId = req.body.ownerId;
-    const response = await database.addItemToCart(req.body, userId, ownerId);
+    const response = await database.addItemToCart(req.body);
     return res.status(200).json(response);
 };
 
 exports.removeOneProducts = async (req, res) => {
     const id = req.body.id;
     const userId = req.body.userId;
-    const ownerId = req.body.ownerId;
-    const response = await database.removeOneItem(id, userId, ownerId);
+    const storeId = req.body.storeId;
+    const response = await database.removeOneItem(id, userId, storeId);
     return res.status(200).json(response);
 };
 
 exports.removeAllProducts = async (req, res) => {
     const id = req.body.id;
     const userId = req.body.userId;
-    const ownerId = req.body.ownerId;
-    const response = await database.removeOneInstance(id, userId, ownerId);
+    const storeId = req.body.storeId;
+    const response = await database.removeOneInstance(id, userId, storeId);
     return res.status(200).json(response);
 };
 
 exports.getItems = async (req, res) => {
     const userId = req.params.userId;
-    const ownerId = req.params.ownerId;
-    const response = await database.findAllData(userId, ownerId);
+    const storeId = req.params.storeId;
+    console.log(userId, storeId)
+    const response = await database.findAllData(userId, storeId);
+    console.log(response)
     return res.status(200).json(response);
 };
 

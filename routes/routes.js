@@ -4,13 +4,13 @@ const pageController = require('../Controller/pageController');
 
 router.get("/storeCheck/:storeId", pageController.storeCheck);
 
-router.get("/site-data/:ownerId", pageController.getSiteData);
+router.get("/site-data/:storeId", pageController.getSiteData);
 
-router.get("/getProducts/:ownerId/:count", pageController.getProductsData);
+router.get("/getProducts/:storeId/:count", pageController.getProductsData);
 
-router.get("/getProductDetails/:ownerId/:id", pageController.getProductDetails);
+router.get("/getProductDetails/:storeId/:id", pageController.getProductDetails);
 
-router.get("/getProductsByCategory/:ownerId/:category", pageController.getProductsByCategory);
+router.get("/getProductsByCategory/:storeId/:category", pageController.getProductsByCategory);
 
 router.post("/add-new", pageController.addNewProduct);
 
@@ -18,9 +18,9 @@ router.post("/remove-one", pageController.removeOneProducts);
 
 router.post("/remove-all", pageController.removeAllProducts);
 
-router.get("/get-items/:ownerId/:userId", pageController.getItems);
+router.get("/get-items/:storeId/:userId", pageController.getItems);
 
-router.get("/getCategories/:ownerId/:count", pageController.getCategories);
+router.get("/getCategories/:storeId/:count", pageController.getCategories);
 
 router.post("/registerOwner", pageController.registerOwner);
 

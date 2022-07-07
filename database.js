@@ -4,7 +4,7 @@ const { getSomeCategories, getSomeProducts, getSpecificItem, getProductsByCatego
 
 const user = new Schema({ name: String, email: String, pwd: String, storeId: String });
 const owner = new Schema({ name: String, email: String, pwd: String });
-const cart = new Schema({ id: String, image: String, title: String, type: String, size: String, quantity: Number, price: String, userId: String, ownerId: String });
+const cart = new Schema({ id: String, image: String, title: String, type: String, size: String, quantity: Number, price: String, userId: String, storeId: String });
 const User = mongoose.model('User', user);
 const Owner = mongoose.model('Owner', owner);
 const Cart = mongoose.model('Cart', cart);
@@ -24,11 +24,11 @@ exports.storeCheck = async (storeId) => {
 
 // Cart Actions
 
-exports.addItemToCart = async (item, userId, ownerId) => {
+exports.addItemToCart = async (item) => {
     try {
-        const checkItem = await Cart.findOne({ id: item.id, ownerId, userId });
+        const checkItem = await Cart.findOne({ id: item.id, storeId: item.storeId, userId: item.userId });
         if(checkItem) {
-            const data = await Cart.updateOne({id: item.id, userId, ownerId}, {$inc : {quantity: 1}})
+            const data = await Cart.updateOne({id: item.id, userId: item.userId, storeId: item.storeId}, {$inc : {quantity: 1}})
             return data;
         }
         const selectedItem = { ...item, quantity: parseInt(item.quantity) };
@@ -39,31 +39,34 @@ exports.addItemToCart = async (item, userId, ownerId) => {
     }
 }
 
-exports.findAllData = async (userId, ownerId) => {
+exports.findAllData = async (userId, storeId) => {
+    console.log("Finding")
     try {
-        return await Cart.find({userId, ownerId});
+        console.log("Safe")
+        return await Cart.find({userId, storeId});
     } catch (err) {
+        console.log("Error")
         return false;
     }
 }
 
-exports.removeOneItem = async (id, userId, ownerId) => {
+exports.removeOneItem = async (id, userId, storeId) => {
     try {
-        const data = await Cart.findOne({ id, userId, ownerId });
+        const data = await Cart.findOne({ id, userId, storeId });
         if(data.quantity > 1) {
-            const value = await Cart.updateOne({id, userId, ownerId}, {$inc : {quantity: -1}})
+            const value = await Cart.updateOne({id, userId, storeId}, {$inc : {quantity: -1}})
             return value;
         }
-        const value = await Cart.deleteOne({ id, userId, ownerId });
+        const value = await Cart.deleteOne({ id, userId, storeId });
         return value;
     } catch (err) {
         console.log(err);
     }
 }
 
-exports.removeOneInstance = async (id, userId, ownerId) => {
+exports.removeOneInstance = async (id, userId, storeId) => {
     try {
-        const data = await Cart.deleteOne({ id, userId, ownerId });
+        const data = await Cart.deleteOne({ id, userId, storeId });
         return data;
     } catch (err) {
         console.log(err);
@@ -95,7 +98,7 @@ exports.loginOwner = async (ownerData) => {
 }
 
 exports.registerUser = async (userData) => {
-    const query = {name: userData.userName, email: userData.mail, pwd: userData.password, storeId: userData.ownerId};
+    const query = {name: userData.userName, email: userData.mail, pwd: userData.password, storeId: userData.storeId};
     const check = await User.findOne({email: query.email});
     console.log(userData, check);
     if(check) {
