@@ -5,6 +5,7 @@ const { getSomeProducts, getSpecificItem, getProductsByCategory, storeCheck, gen
 exports.storeCheck = async (req, res) => {
     const storeId = req.params.storeId;
     try {
+        console.log(storeId);
         const response = await storeCheck(storeId);
         if(!response) {
             throw new Error(false);
@@ -55,20 +56,35 @@ exports.getSiteData = async (req, res) => {
 }
 
 exports.getProductsData = async (req, res) => {
-    const count = req.params.count;
-    const data = await getSomeProducts(count);
-    data ? res.status(200).json(data) : res.sendStatus(404);
+    try {
+        const count = req.params.count;
+        const storeId = req.params.storeId;
+        const data = await getSomeProducts(count, storeId);
+        res.status(200).json(data);
+    } catch(e) {
+        res.sendStatus(404);
+    }
 }
 exports.getProductDetails = async (req, res) => {
-    const id = req.params.id;
-    const data = await getSpecificItem(id);
-    data ? res.status(200).json(data) : res.sendStatus(404);
+    try {
+        const id = req.params.id;
+        const storeId = req.params.storeId;
+        const data = await getSpecificItem(storeId, id);
+        res.status(200).json(data);
+    } catch(e) {
+        res.sendStatus(404);
+    }
 }
 
 exports.getProductsByCategory = async (req, res) => {
-    const category = req.params.category;
-    const data = await getProductsByCategory(category);
-    data ? res.status(200).json(data) : res.sendStatus(404);
+    try {
+        const category = req.params.category;
+        const storeId = req.params.storeId;
+        const data = await getProductsByCategory(storeId, category);
+        res.status(200).json(data)
+    } catch(e) {
+        res.sendStatus(404);
+    }
 }
 
 exports.addNewProduct = async (req, res) => {
@@ -108,7 +124,8 @@ exports.getItems = async (req, res) => {
 exports.getCategories = async (req, res) => {
     try {
         const count = req.params.count;
-        const data = await database.getSomeCategories(count);
+        const storeId = req.params.storeId;
+        const data = await database.getSomeCategories(count, storeId);
         if(!data) {
             throw new Error(false);
         }

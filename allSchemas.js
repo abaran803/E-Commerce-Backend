@@ -10,15 +10,26 @@ const brands = new mongoose.Schema({
     value: String
 })
 
-const products = new mongoose.Schema({
-    value: {},
-    storeId: String
-})
+// const products = new mongoose.Schema({
+//     id: Number,
+//     title: String,
+//     price: Number,
+//     description: String,
+//     category: String,
+//     image: String,
+//     rating: {},
+//     storeId: String
+// })
 
-const categories = new mongoose.Schema({
-    value: {},
-    storeId: String
-})
+// const categories = new mongoose.Schema(
+//     {
+//         category: String,
+//         id: Number,
+//         image: String,
+//         description: String,
+//         storeId: String
+//     }
+// )
 
 const features = new mongoose.Schema({
     _id: String,
@@ -32,6 +43,6 @@ const footerData = new mongoose.Schema({
 
 exports.Navs = mongoose.model('nav', navs);
 exports.Brands = mongoose.model('brand', brands);
-exports.Categories = mongoose.model('category', categories);
-exports.Products = mongoose.model('product', products);
+// exports.Categories = mongoose.model('category', categories);
+// exports.Products = mongoose.model('product', products);
 exports.Features = mongoose.model('feature', features);

@@ -11,38 +11,21 @@ const Owner = mongoose.model('Owner', owner);
 const Cart = mongoose.model('Cart', cart);
 const ShopData = mongoose.model('ShopData', shopData)
 
-const {Products, Categories, Navs, Brands, Features} = require('./allSchemas');
-const siteData = require('./siteData');
+const store = new Schema({ storeId: String, email: String, password: String });
+const category = new Schema({ category: String, id: Number, image: String, description: String, storeId: String });
+const product = new Schema({ id: String, title: String, price: String, description: String, category: String, image: String, rating: {}, storeId: String })
+const Store = mongoose.model('store', store);
+const Category = mongoose.model('category', category);
+const Product = mongoose.model('product', product);
 
-mongoose.connect("mongodb://localhost:27017/shopgenerator")
+mongoose.connect(process.env.CONNECTION_STRING)
     .then(data => console.log('Database Connected'))
     .catch(err => console.log("Database not Connected", err))
 
-const tempId = mongoose.Types.ObjectId("62daadc9b528a5ec706e97c0");
-
-const setData = (data) => {
-    const n = new Categories({value: data, storeId: tempId});
-    n.save((err, nav) => {
-        if(err) {
-            return console.log("Error:", err);
-        }
-        console.log("Data:", nav);
-    })
-}
-
-const temporaryFunc = async () => {
-    setTimeout(async () => {
-        const data = await getSomeCategories(6);
-        data.forEach(item => setData(item));
-    }, 1000);
-}
-
-temporaryFunc();
-
-
 exports.storeCheck = async (storeId) => {
     try {
-        const check = await Owner.findById(storeId);
+        // const check = await Owner.findById(storeId);
+        const check = await Store.findOne({storeId});
         if(!check) {
             throw new Error(false);
         }
@@ -165,36 +148,39 @@ exports.loginUser = async (userData) => {
     return response;
 }
 
-
-// Site Data Action with verifying credentials
-
-exports.getSomeCategories = async (count) => {
+exports.getSomeCategories = async (count, storeId) => {
     try {
-        return await getSomeCategories(count);
+        // return await getSomeCategories(count);
+        const data = await Category.find({storeId}).limit(count);
+        return data;
     } catch(error) {
         return false;
     }
 }
 
-exports.getSomeProducts = async (count) => {
+exports.getSomeProducts = async (count, storeId) => {
     try {
-        return await getSomeProducts(count);
+        // return await getSomeProducts(count);
+        const data = await Product.find({storeId}).limit(count);
+        return data;
     } catch(error) {
         return false;
     }
 }
 
-exports.getSpecificItem = async (id) => {
+exports.getSpecificItem = async (storeId, id) => {
     try {
-        return await getSpecificItem(id);
+        const product = await Product.findOne({storeId, id});
+        return product;
     } catch(error) {
         return false;
     }
 }
 
-exports.getProductsByCategory = async (category) => {
+exports.getProductsByCategory = async (storeId, category) => {
     try {
-        return await getProductsByCategory(category);
+        const productsByCategory = await Product.find({storeId, category})
+        return productsByCategory;
     } catch(error) {
         return false;
     }
