@@ -2,12 +2,14 @@ const mongoose = require('mongoose');
 
 const navs = new mongoose.Schema({
     _id: String,
-    value: []
+    value: [],
+    storeId: String
 })
 
 const brands = new mongoose.Schema({
     _id: String,
-    value: String
+    value: String,
+    storeId: String
 })
 
 // const products = new mongoose.Schema({
@@ -32,8 +34,8 @@ const brands = new mongoose.Schema({
 // )
 
 const features = new mongoose.Schema({
-    _id: String,
-    value: []
+    value: [],
+    storeId: String
 })
 
 const footerData = new mongoose.Schema({
