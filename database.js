@@ -18,7 +18,7 @@ const Category = mongoose.model('category', category);
 const Product = mongoose.model('product', product);
 const { Navs, Brands, Features } = require('./allSchemas');
 
-mongoose.connect('mongodb+srv://abaran803:zk4HiRi4HySsFtwe@shopping-data.ft1ko.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
+mongoose.connect(process.env.CONNECTION_STRING)
     .then(data => console.log('Database Connected'))
     .catch(err => console.log("Database not Connected", err))
 
