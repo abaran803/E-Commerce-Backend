@@ -4,11 +4,11 @@ const Schema = mongoose.Schema;
 const user = new Schema({ name: String, email: String, pwd: String, storeId: String });
 const owner = new Schema({ name: String, email: String, pwd: String });
 const cart = new Schema({ id: String, image: String, title: String, type: String, size: String, quantity: Number, price: String, userId: String, storeId: String });
-const shopData = new Schema({ data: {} })
+const footer = new Schema({ data: {} })
 const User = mongoose.model('User', user);
 const Owner = mongoose.model('Owner', owner);
 const Cart = mongoose.model('Cart', cart);
-const ShopData = mongoose.model('ShopData', shopData)
+const Footer = mongoose.model('footer', footer)
 
 const store = new Schema({ storeId: String, email: String, password: String });
 const category = new Schema({ category: String, id: Number, image: String, description: String, storeId: String });
@@ -56,11 +56,10 @@ exports.generateStore = async (data) => {
 
 exports.getAllShop = async (storeId) => {
     try {
-        const footer = await ShopData.findById(storeId);
+        const { quick, newProduct, support } = (await Footer.findById(storeId).lean()).value;
         const features = (await getFeatures(storeId)).value;
         const navItems = (await getNavs(storeId)).value;
         const brandName = (await getBrandName(storeId)).value;
-        const { quick, newProduct, support } = footer.data;
         const data = { brandName, navItems, features, quick, newProduct, support };
         if (!data) {
             throw new Error(false);
