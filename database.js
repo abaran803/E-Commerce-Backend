@@ -32,12 +32,10 @@ const getBrandName = async (storeId) => {
     return data;
 }
 
-// const getFeatures = async (storeId) => {
-//     const data = await Features.findOne({ storeId })
-//     Object.keys(data).forEach(item => console.log(item, data[item]));
-//     console.log(data);
-//     return data;
-// }
+const getFeatures = async (storeId) => {
+    const data = await Features.findOne({ storeId })
+    return data;
+}
 
 exports.storeCheck = async (storeId) => {
     try {
@@ -58,18 +56,16 @@ exports.generateStore = async (data) => {
 
 exports.getAllShop = async (storeId) => {
     try {
-        const data = await ShopData.findById(storeId);
-        // const { value: navItems } = await getNavs(storeId);
-        // const brandName = (await getBrandName(storeId)).value;
-        // const features = await getFeatures(storeId);
-        // data.data = { ...(data.data), navItems, brandName };
-        // console.log(data);
-        // console.log({features: features.value});
-        // console.log(brandName);
+        const footer = await ShopData.findById(storeId);
+        const features = (await getFeatures(storeId)).value;
+        const navItems = (await getNavs(storeId)).value;
+        const brandName = (await getBrandName(storeId)).value;
+        const { quick, newProduct, support } = footer.data;
+        const data = { brandName, navItems, features, quick, newProduct, support };
         if (!data) {
             throw new Error(false);
         }
-        return data;
+        return { data };
     } catch (e) {
         return false;
     }
