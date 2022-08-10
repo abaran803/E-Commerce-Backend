@@ -77,7 +77,7 @@ exports.generateStore = async (data) => {
 
 exports.getAllShop = async (storeId) => {
     try {
-        const { quick, newProduct, support } = (await Footer.findById(storeId).lean()).value;
+        const { quick, newProduct, support } = (await Footer.findOne({storeId}).lean()).value;
         const features = (await getFeatures(storeId)).value;
         const navItems = (await getNavs(storeId)).value;
         const brandName = (await getBrandName(storeId)).value;
