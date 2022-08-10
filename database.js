@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const user = new Schema({ name: String, email: String, pwd: String, storeId: String });
 const owner = new Schema({ name: String, email: String, pwd: String });
 const cart = new Schema({ id: String, image: String, title: String, type: String, size: String, quantity: Number, price: String, userId: String, storeId: String });
-const footer = new Schema({ data: {} })
+const footer = new Schema({ value: {}, storeId: String })
 const User = mongoose.model('User', user);
 const Owner = mongoose.model('Owner', owner);
 const Cart = mongoose.model('Cart', cart);
@@ -51,7 +51,28 @@ exports.storeCheck = async (storeId) => {
 }
 
 exports.generateStore = async (data) => {
-    await ShopData.create(data);
+    const storeId = mongoose.Types.ObjectId();
+    const {email, password, brandName, navs, categories, products, features, footers} = data;
+    const brand = new Brands({value: brandName, storeId})
+    await brand.save();
+    const newNavs = new Navs({value: navs.value, storeId});
+    await newNavs.save();
+    for(let i=0; i<categories.length; i++) {
+        const newCategory = new Category({...categories[i], storeId});
+        await newCategory.save();
+    }
+    for(let i=0; i<products.length; i++) {
+        const newProduct = new Product({...products[i], storeId});
+        await newProduct.save();
+    }
+    const newFeatures = new Features({value: features.value, storeId});
+    await newFeatures.save();
+    const newFooters = new Footer({value: footers.value, storeId});
+    await newFooters.save();
+    const newStore = new Store({storeId, email, password});
+    await newStore.save();
+    return storeId;
+    // await ShopData.create(data);
 }
 
 exports.getAllShop = async (storeId) => {

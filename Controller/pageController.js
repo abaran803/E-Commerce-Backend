@@ -1,6 +1,7 @@
 const database = require('../database');
 const siteData = require('../siteData');
 const { getSomeProducts, getSpecificItem, getProductsByCategory, storeCheck, generateStore, getAllShop} = require('../database');
+const sampleShopGenerator = require('../sampleShopGenerator');
 
 exports.storeCheck = async (req, res) => {
     const storeId = req.params.storeId;
@@ -17,7 +18,7 @@ exports.storeCheck = async (req, res) => {
 }
 
 exports.generateStore = async (req, res) => {
-    req.body = siteData;
+    // req.body = sampleShopGenerator;
     // try {
     //     const storeId = req.body.storeId;
     //     const response = await storeCheck(storeId);
@@ -29,9 +30,10 @@ exports.generateStore = async (req, res) => {
     //     res.status(404).send({"message": e.message});
     // }
     try {
-        await generateStore(req.body);
-        res.send({message: "Store created Successfully"});
+        const storeId = await generateStore(req.body);
+        res.send({message: "Store created Successfully", storeId});
     } catch(e) {
+        console.log(e.message)
         res.status("409").send({message: "Some error occured"});
     }
 }

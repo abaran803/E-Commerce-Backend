@@ -1,13 +1,11 @@
 const mongoose = require('mongoose');
 
 const navs = new mongoose.Schema({
-    _id: String,
     value: [],
     storeId: String
 })
 
 const brands = new mongoose.Schema({
-    _id: String,
     value: String,
     storeId: String
 })

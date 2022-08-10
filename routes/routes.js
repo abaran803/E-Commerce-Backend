@@ -30,4 +30,6 @@ router.post("/registerUser", pageController.registerUser);
 
 router.post("/loginUser", pageController.loginUser);
 
+router.post('/generateStore', pageController.generateStore);
+
 module.exports = router;
