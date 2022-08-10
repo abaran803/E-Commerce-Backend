@@ -2,37 +2,35 @@
     "brandName": "AmazKart",
     "name": "Ayush",
     "email": "ayush1@gmail.com",
-    "pwd": "12345",
-    "navs": [
-        {
-            "value": [
-                {
-                    "address": "/home",
-                    "name": "Home"
-                },
-                {
-                    "address": "/product",
-                    "name": "Product"
-                },
-                {
-                    "address": "category",
-                    "name": "Category"
-                },
-                {
-                    "address": "/about",
-                    "name": "About Us"
-                },
-                {
-                    "address": "/contact",
-                    "name": "Contact Us"
-                },
-                {
-                    "address": "/cart",
-                    "name": "Cart"
-                }
-            ]
-        }
-    ],
+    "password": "12345",
+    "navs": {
+        "value": [
+            {
+                "address": "/home",
+                "name": "Home"
+            },
+            {
+                "address": "/product",
+                "name": "Product"
+            },
+            {
+                "address": "category",
+                "name": "Category"
+            },
+            {
+                "address": "/about",
+                "name": "About Us"
+            },
+            {
+                "address": "/contact",
+                "name": "Contact Us"
+            },
+            {
+                "address": "/cart",
+                "name": "Cart"
+            }
+        ]
+    },
     "categories": [
         {
             "category": "electronics",
@@ -301,85 +299,81 @@
             }
         }
     ],
-    "features": [
-        {
-            "value": [
-                {
+    "features": {
+        "value": [
+            {
                 "iconClass": "fas fa-shipping-fast fa-3x mb-3 pt-2",
-                    "title": "Free Shipping Method",
+                "title": "Free Shipping Method",
                 "desc": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Iusto atque sequi molestiae, illum quaerat suscipit neque maxime velit voluptates pariatur consequuntur voluptate beatae, sapiente magnam dolores placeat provident eos! Aperiam sint veritatis ullam totam voluptatem itaque deleniti nobis explicabo eligendi?"
-                },
-                {
+            },
+            {
                 "iconClass": "fas fa-shipping-fast fa-3x mb-3 pt-2",
-                    "title": "Secure Payment System",
+                "title": "Secure Payment System",
                 "desc": "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quo vero hic odio, nobis possimus, magnam veniam, suscipit aliquid vitae at sit? Architecto, fuga velit facere quae rem fugiat sunt quasi."
+            },
+            {
+                "iconClass": "fas fa-shipping-fast fa-3x mb-3 pt-2",
+                "title": "Free Shipping",
+                "desc": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vel voluptate molestiae ullam! Minima deleniti, ipsam porro, quibusdam sint numquam voluptate fugiat nostrum necessitatibus excepturi inventore mollitia quis animi voluptatibus magnam pariatur enim voluptatum officia debitis!"
+            }
+        ]
+    },
+    "footers": {
+        "value": {
+            "quick": [
+                {
+                    "name": "About",
+                    "address": "/about"
                 },
                 {
-                "iconClass": "fas fa-shipping-fast fa-3x mb-3 pt-2",
-                    "title": "Free Shipping",
-                "desc": "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vel voluptate molestiae ullam! Minima deleniti, ipsam porro, quibusdam sint numquam voluptate fugiat nostrum necessitatibus excepturi inventore mollitia quis animi voluptatibus magnam pariatur enim voluptatum officia debitis!"
+                    "name": "Offers & Discounts",
+                    "address": "/"
+                },
+                {
+                    "name": "Get Coupon",
+                    "address": "/"
+                },
+                {
+                    "name": "Contact Us",
+                    "address": "/contact"
+                }
+            ],
+            "newProduct": [
+                {
+                    "name": "Woman Cloth",
+                    "address": "/"
+                },
+                {
+                    "name": "Fashion Accessories",
+                    "address": "/"
+                },
+                {
+                    "name": "Get Coupon",
+                    "address": "/"
+                },
+                {
+                    "name": "Rubber made Toys",
+                    "address": "/"
+                }
+            ],
+            "support": [
+                {
+                    "name": "Frequently Asked Questions",
+                    "address": "/"
+                },
+                {
+                    "name": "Terms & Conditions",
+                    "address": "/"
+                },
+                {
+                    "name": "Privacy Policy",
+                    "address": "/"
+                },
+                {
+                    "name": "Report a Payment Issue",
+                    "address": "/"
                 }
             ]
         }
-    ],
-    "footers": [
-        {
-            "value": {
-            "quick": [
-                    {
-                        "name": "About",
-                        "address": "/about"
-                    },
-                    {
-                        "name": "Offers & Discounts",
-                        "address": "/"
-                    },
-                    {
-                        "name": "Get Coupon",
-                        "address": "/"
-                    },
-                    {
-                        "name": "Contact Us",
-                        "address": "/contact"
-                    }
-                ],
-            "newProduct": [
-                    {
-                        "name": "Woman Cloth",
-                        "address": "/"
-                    },
-                    {
-                        "name": "Fashion Accessories",
-                        "address": "/"
-                    },
-                    {
-                        "name": "Get Coupon",
-                        "address": "/"
-                    },
-                    {
-                        "name": "Rubber made Toys",
-                        "address": "/"
-                    }
-                ],
-            "support": [
-                    {
-                        "name": "Frequently Asked Questions",
-                        "address": "/"
-                    },
-                    {
-                        "name": "Terms & Conditions",
-                        "address": "/"
-                    },
-                    {
-                        "name": "Privacy Policy",
-                        "address": "/"
-                    },
-                    {
-                        "name": "Report a Payment Issue",
-                        "address": "/"
-                    }
-                ]
-            }
-        }
-    ]
+    }
 }
