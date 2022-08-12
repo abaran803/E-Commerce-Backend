@@ -22,10 +22,6 @@ router.get("/get-items/:storeId/:userId", pageController.getItems);
 
 router.get("/getCategories/:storeId/:count", pageController.getCategories);
 
-router.post("/registerOwner", pageController.registerOwner);
-
-router.post("/loginOwner", pageController.loginOwner);
-
 router.post("/registerUser", pageController.registerUser);
 
 router.post("/loginUser", pageController.loginUser);

@@ -1,24 +1,10 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const user = new Schema({ name: String, email: String, pwd: String, storeId: String });
-const owner = new Schema({ name: String, email: String, pwd: String });
-const cart = new Schema({ id: String, image: String, title: String, type: String, size: String, quantity: Number, price: String, userId: String, storeId: String });
-const footer = new Schema({ value: {}, storeId: String })
-const User = mongoose.model('User', user);
-const Owner = mongoose.model('Owner', owner);
-const Cart = mongoose.model('Cart', cart);
-const Footer = mongoose.model('footer', footer)
+const { User, Owner, Cart } = require('./model/cartModel');
+const { Navs, Brands, Category, Product, Features, Footer, Store } = require('./model/shopModel');
 
-const store = new Schema({ storeId: String, email: String, password: String });
-const category = new Schema({ category: String, id: Number, image: String, description: String, storeId: String });
-const product = new Schema({ id: String, title: String, price: String, description: String, category: String, image: String, rating: {}, storeId: String })
-const Store = mongoose.model('store', store);
-const Category = mongoose.model('category', category);
-const Product = mongoose.model('product', product);
-const { Navs, Brands, Features } = require('./allSchemas');
-
-mongoose.connect(process.env.CONNECTION_STRING)
+mongoose.connect(process.env.CONNECTION_STRING_LOCAL3)
     .then(data => console.log('Database Connected'))
     .catch(err => console.log("Database not Connected", err))
 
@@ -37,58 +23,65 @@ const getFeatures = async (storeId) => {
     return data;
 }
 
+// Checking the store existance
 exports.storeCheck = async (storeId) => {
-    try {
-        // const check = await Owner.findById(storeId);
-        const check = await Store.findOne({ storeId });
-        if (!check) {
-            throw new Error(false);
-        }
-        return "Store Found";
-    } catch (e) {
-        return false;
-    }
+    const check = await Store.findOne({ storeId });
+    return check;
 }
 
+// Generating the Store
 exports.generateStore = async (data) => {
+
+    // New ID for store
     const storeId = mongoose.Types.ObjectId();
-    const {email, password, brandName, navs, categories, products, features, footers} = data;
-    const brand = new Brands({value: brandName, storeId})
+
+    // Extracting data from the provided JSON
+    const { email, password, brandName, navs, categories, products, features, footers } = data;
+
+    // Adding brand name to DB
+    const brand = new Brands({ value: brandName, storeId })
     await brand.save();
-    const newNavs = new Navs({value: navs.value, storeId});
+
+    // Adding navs to DB
+    const newNavs = new Navs({ value: navs.value, storeId });
     await newNavs.save();
-    for(let i=0; i<categories.length; i++) {
-        const newCategory = new Category({...categories[i], storeId});
+
+    // Adding all the categories to DB
+    for (let i = 0; i < categories.length; i++) {
+        const newCategory = new Category({ ...categories[i], storeId });
         await newCategory.save();
     }
-    for(let i=0; i<products.length; i++) {
-        const newProduct = new Product({...products[i], storeId});
+
+    // Adding all the products to DB
+    for (let i = 0; i < products.length; i++) {
+        const newProduct = new Product({ ...products[i], storeId });
         await newProduct.save();
     }
-    const newFeatures = new Features({value: features.value, storeId});
+
+    // Adding all the features to DB
+    const newFeatures = new Features({ value: features.value, storeId });
     await newFeatures.save();
-    const newFooters = new Footer({value: footers.value, storeId});
+
+    // Adding footer data to DB
+    const newFooters = new Footer({ value: footers.value, storeId });
     await newFooters.save();
-    const newStore = new Store({storeId, email, password});
+
+    // Creating store at DB for checking if it exist
+    const newStore = new Store({ storeId, email, password });
     await newStore.save();
+
+    // Returning ID of newly generated store
     return storeId;
-    // await ShopData.create(data);
 }
 
-exports.getAllShop = async (storeId) => {
-    try {
-        const { quick, newProduct, support } = (await Footer.findOne({storeId}).lean()).value;
-        const features = (await getFeatures(storeId)).value;
-        const navItems = (await getNavs(storeId)).value;
-        const brandName = (await getBrandName(storeId)).value;
-        const data = { brandName, navItems, features, quick, newProduct, support };
-        if (!data) {
-            throw new Error(false);
-        }
-        return { data };
-    } catch (e) {
-        return false;
-    }
+// Getting the data of entire shop
+exports.getFullShop = async (storeId) => {
+    const { quick, newProduct, support } = (await Footer.findOne({ storeId }).lean()).value;
+    const features = (await getFeatures(storeId)).value;
+    const navItems = (await getNavs(storeId)).value;
+    const brandName = (await getBrandName(storeId)).value;
+    const data = { brandName, navItems, features, quick, newProduct, support };
+    return data;
 }
 
 // Cart Actions
@@ -143,30 +136,6 @@ exports.removeOneInstance = async (id, userId, storeId) => {
     }
 }
 
-
-
-// Register and Login Actions
-
-exports.registerOwner = async (ownerData) => {
-    const query = { name: ownerData.userName, email: ownerData.mail, pwd: ownerData.password };
-    const check = await Owner.findOne({ email: query.email });
-    if (check) {
-        return false;
-    }
-    const data = await Owner.create(query);
-    return data;
-}
-
-exports.loginOwner = async (ownerData) => {
-    const query = { name: ownerData.userName, email: ownerData.mail, pwd: ownerData.password };
-    const check = await Owner.findOne({ email: query.email, pwd: query.pwd });
-    if (!check) {
-        return false;
-    }
-    const response = check;
-    return response;
-}
-
 exports.registerUser = async (userData) => {
     const query = { name: userData.userName, email: userData.mail, pwd: userData.password, storeId: userData.storeId };
     const check = await User.findOne({ email: query.email });
@@ -188,40 +157,22 @@ exports.loginUser = async (userData) => {
     return response;
 }
 
-exports.getSomeCategories = async (count, storeId) => {
-    try {
-        // return await getSomeCategories(count);
-        const data = await Category.find({ storeId }).limit(count);
-        return data;
-    } catch (error) {
-        return false;
-    }
+exports.getLimitedCategories = async (count, storeId) => {
+    const data = await Category.find({ storeId }).limit(count);
+    return data;
 }
 
-exports.getSomeProducts = async (count, storeId) => {
-    try {
-        // return await getSomeProducts(count);
-        const data = await Product.find({ storeId }).limit(count);
-        return data;
-    } catch (error) {
-        return false;
-    }
+exports.getLimitedProducts = async (count, storeId) => {
+    const data = await Product.find({ storeId }).limit(count);
+    return data;
 }
 
 exports.getSpecificItem = async (storeId, id) => {
-    try {
-        const product = await Product.findOne({ storeId, id });
-        return product;
-    } catch (error) {
-        return false;
-    }
+    const product = await Product.findOne({ storeId, id });
+    return product;
 }
 
 exports.getProductsByCategory = async (storeId, category) => {
-    try {
-        const productsByCategory = await Product.find({ storeId, category })
-        return productsByCategory;
-    } catch (error) {
-        return false;
-    }
+    const productsByCategory = await Product.find({ storeId, category })
+    return productsByCategory;
 }
