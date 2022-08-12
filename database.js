@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const { User, Owner, Cart } = require('./model/cartModel');
 const { Navs, Brands, Category, Product, Features, Footer, Store } = require('./model/shopModel');
 
-mongoose.connect(process.env.CONNECTION_STRING_LOCAL3)
+mongoose.connect(process.env.CONNECTION_STRING)
     .then(data => console.log('Database Connected'))
     .catch(err => console.log("Database not Connected", err))
 
