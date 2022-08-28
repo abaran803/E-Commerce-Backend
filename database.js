@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const { User, Cart } = require('./model/cartModel');
 const { Navs, Brands, Category, Product, Features, Footer, Store } = require('./model/shopModel');
 
