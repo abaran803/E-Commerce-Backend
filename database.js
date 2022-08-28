@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
-
-const { User, Owner, Cart } = require('./model/cartModel');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const { User, Cart } = require('./model/cartModel');
 const { Navs, Brands, Category, Product, Features, Footer, Store } = require('./model/shopModel');
 
 mongoose.connect(process.env.CONNECTION_STRING)
@@ -137,9 +137,9 @@ exports.removeOneInstance = async (id, userId, storeId) => {
 }
 
 exports.registerUser = async (userData) => {
-    const query = { name: userData.userName, email: userData.mail, pwd: userData.password, storeId: userData.storeId };
+    const hashedPassword = await bcrypt.hash(userData.password, 8);
+    const query = { name: userData.userName, email: userData.mail, pwd: hashedPassword, storeId: userData.storeId, tokens: [] };
     const check = await User.findOne({ email: query.email });
-    console.log(userData, check);
     if (check) {
         return false;
     }
@@ -149,11 +149,18 @@ exports.registerUser = async (userData) => {
 
 exports.loginUser = async (userData) => {
     const query = { name: userData.userName, email: userData.mail, pwd: userData.password };
-    const check = await User.findOne({ email: query.email, pwd: query.pwd });
-    if (!check) {
+    const check = await User.findOne({ email: query.email });
+    if(!check) {
         return false;
     }
-    const response = check;
+    const isMatched = await bcrypt.compare(userData.password, check.pwd);
+    if (!isMatched) {
+        return false;
+    }
+    const token = jwt.sign({ _id: check["_id"].toString()}, process.env.SECRET_KEY);
+    check.tokens = check.tokens.concat({ token });
+    await check.save();
+    const response = {token};
     return response;
 }
 
